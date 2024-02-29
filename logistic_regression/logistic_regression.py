@@ -75,7 +75,7 @@ def stochastic_gradient_ascent0(data_matrix, class_labels):
     """stochastic gradient ascent"""
     m, n = np.shape(data_matrix)
     alpha = 0.01
-    weights = np.ones(n)  # initialize to all ones
+    weights = np.ones(n)
     for i in range(m):
         h = sigmoid(sum(data_matrix[i] * weights))
         error = class_labels[i] - h
@@ -86,16 +86,14 @@ def stochastic_gradient_ascent0(data_matrix, class_labels):
 def stochastic_gradient_ascent1(data_matrix, class_labels, num_iter=150):
     """stochastic gradient ascent"""
     m, n = np.shape(data_matrix)
-    weights = np.ones(n)  # initialize to all ones
+    weights = np.ones(n)
     for j in range(num_iter):
         data_index = list(range(m))
         for i in range(m):
             alpha = (
                 4 / (1.0 + j + i) + 0.0001
-            )  # apha decreases with iteration, does not
-            rand_index = int(
-                np.random.uniform(0, len(data_index))
-            )  # go to 0 because of the constant
+            )  # alpha decreases with iteration, does not go to 0 because of the constant
+            rand_index = int(np.random.uniform(0, len(data_index)))
             h = sigmoid(sum(data_matrix[rand_index] * weights))
             error = class_labels[rand_index] - h
             weights = weights + alpha * error * data_matrix[rand_index]
@@ -104,5 +102,9 @@ def stochastic_gradient_ascent1(data_matrix, class_labels, num_iter=150):
 
 
 data_matrix_global, label_matrix_global = load_data_set()
-weights_global = gradient_ascent(data_matrix_global, label_matrix_global)
-plot_best_fit(weights_global.getA())
+# weights_global = gradient_ascent(data_matrix_global, label_matrix_global)
+# plot_best_fit(weights_global.getA())
+weights_global = stochastic_gradient_ascent1(
+    np.array(data_matrix_global), label_matrix_global
+)
+plot_best_fit(weights_global)
